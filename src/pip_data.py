@@ -27,7 +27,7 @@ def get_all_dfs(list_of_filenames:[]):
 
 #Creating the union of all the datasets
 def create_union(list: []):
-    return pd.concat(list)
+    return pd.concat(list).drop_duplicates(keep='first', inplace=True)
 
 #Downloading all the data sets
 def download_datasets(file_path: str):
@@ -47,7 +47,7 @@ def download_datasets(file_path: str):
 
 #Write final data set
 def write_file(dataframe, output_file):
-    dataframe.to_csv(output_file, sep='\t', index=False, header=False)
+    dataframe.to_csv('../output/'+output_file, sep='\t', index=False, header=False)
 
 parser = argparse.ArgumentParser(description="Gets as input an txt-File and downloads the corresponding Files")
 parser.add_argument('-in','--input', type=str, help='Path to the file with the links.')
@@ -59,6 +59,5 @@ output_path = args.output
 dataset_file_names = download_datasets(input_file_path)
 df_sets = get_all_dfs(dataset_file_names)
 final_data_set = create_union(df_sets)
-final_data_set.drop_duplicates(keep='first', inplace=True)
 write_file(final_data_set, output_path)
 

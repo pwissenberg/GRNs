@@ -17,9 +17,10 @@ python3 pip_data.py -in ../resources/test -out final_GRN.txt
 - **-in**: defines the path to the input file. The file contains per line one link to a file
 - **-out**: defines the path of the final finished dataset
 ## Project-Structure
-- data-🗂: this folder serves cache for all the single datasets
+- data-🗂: this folder serves cache for all the single datasets, which were downloaded
 - resources-🗂: contains allready scrapped links to all the dataset from the databases
 - src-🗂: contains all the code-snippets
+- output-🗂: stores the final GRNs
 ## Tasks
 * [x] Downloading files
 * [x] Concatenating all datasets
