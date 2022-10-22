@@ -24,8 +24,8 @@ python3 pip_data.py -in ../resources/test -out final_GRN.txt
 * [x] Downloading files
 * [x] Concatenating all datasets
 * [x] Works with [GRNdb](http://www.grndb.com/) & [HumanBase](https://hb.flatironinstitute.org/download)
-* [] Optimization for large amount of data
-* [] Should work with adjacenc matrixe
+* [ ] Optimization for large amount of data
+* [ ] Should work with adjacenc matrixe
 ### Contact
 If you have any questions pls, do not hesitate to contact me! :)
 <!-- Tables -->

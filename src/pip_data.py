@@ -19,7 +19,7 @@ def downcast_dtypes(df):
 def get_all_dfs(list_of_filenames:[]):
     data_frames = []
     for file in list_of_filenames:
-        data = pd.read_csv(file, sep='\t', header=None, usecols=[0,1])
+        data = pd.read_csv('../data/'+file, sep='\t', header=None, usecols=[0,1])
         #data = data[['TF','gene']].copy()
         data = downcast_dtypes(data)
         data_frames.append(data)
@@ -47,7 +47,7 @@ def download_datasets(file_path: str):
 
 #Write final data set
 def write_file(dataframe, output_file):
-    dataframe.to_csv('GRN_nodes_all_nodes', sep='\t', index=False, header=False)
+    dataframe.to_csv(output_file, sep='\t', index=False, header=False)
 
 parser = argparse.ArgumentParser(description="Gets as input an txt-File and downloads the corresponding Files")
 parser.add_argument('-in','--input', type=str, help='Path to the file with the links.')
