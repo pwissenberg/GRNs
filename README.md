@@ -24,10 +24,10 @@ Mapping different IDs between the databases. In portions the size of IDs and exe
 #Conversion from one ID to another
 python3 map_ids.py -in hgncid -out ensemble -infile ../output/test_hgnc.txt -outfile ../output/test_ensemble.txt
 ```
--**-in**: defines the ids from the input file
--**-out**: defines the ids from the output file
--**-infile**: defines the path of the input file
--**-outfile**: defines the path of the output file <br> <br>
+- **-in**: defines the ids from the input file
+- **-out**: defines the ids from the output file
+- **-infile**: defines the path of the input file
+- **-outfile**: defines the path of the output file <br> <br>
 **!!The conversion works only with the GeneSymbols, Ensemble and HGNC_ID!!! Please following identifier for the program call: genesymbol, hgncid, ensemble**
 ## Project-Structure
 - data-🗂: this folder serves cache for all the single datasets, which were downloaded
