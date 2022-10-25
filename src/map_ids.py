@@ -3,7 +3,7 @@ import pandas as pd
 import argparse
 
 ensemble = 'EnsemblGeneId&taxonId=9606'
-ids = ['genesymbol', 'hgncid', 'ensemble']
+ids = ['genesymbol', 'hgncid', 'ensemble', 'geneid']
 
 def get_right_json_parameter(id):
     if id == ensemble:
@@ -12,6 +12,8 @@ def get_right_json_parameter(id):
         return 'HGNC ID'
     elif id == 'genesymbol':
         return 'Gene Symbol'
+    elif id == 'geneid':
+        return 'Gene ID'
 
 
 def send_request(input_string, input_ids, output_ids):
@@ -67,7 +69,8 @@ if(output_id == 'ensemble'):
     output_id = ensemble
 
 #Get first input columns
-df = pd.read_csv(input_file, sep='\t')
+df = pd.read_csv(input_file, sep='\t', dtype='str')
+
 data = df.iloc[:,0].to_list()
 
 
