@@ -28,7 +28,17 @@ python3 map_ids.py -in hgncid -out ensemble -infile ../output/test_hgnc.txt -out
 - **-out**: defines the ids from the output file
 - **-infile**: defines the path of the input file
 - **-outfile**: defines the path of the output file <br> <br>
-**!!The conversion works only with the GeneSymbols, Ensemble and HGNC_ID!!! Please following identifier for the program call: genesymbol, hgncid, ensemble**
+**!!The conversion works only with the GeneSymbols, Ensemble and HGNC_ID!!! Please following identifier for the program call: genesymbol, hgncid, ensemble or geneid**
+## Example input & output file
+All the output files should have the same format: **Headerline with TF & gene, then gene represented by its ID \t next ID; New line** 
+```
+TF	gene
+ARID3A	ARID3A
+ARID3A	PLA2G15
+ARNT	RORA
+.   
+.
+```
 ## Project-Structure
 - data-🗂: this folder serves cache for all the single datasets, which were downloaded
 - resources-🗂: contains allready scrapped links to all the dataset from the databases
@@ -39,10 +49,21 @@ python3 map_ids.py -in hgncid -out ensemble -infile ../output/test_hgnc.txt -out
 * [x] Concatenating all datasets
 * [x] Works with [GRNdb](http://www.grndb.com/) & [HumanBase](https://hb.flatironinstitute.org/download)
 * [x] Mapping between HGNC_ID, Ensemble and GeneSymbols
-* [ ] EntrezID is missing in the mapping part
+* [x] EntrezID is missing in the mapping part
+* [ ] When you try to map GeneSymbols to EntrezID(also NCBI gene id it gives you set of working ncbi ids
 * [ ] Optimization for large amount of data
 * [ ] Should work with adjacenc matrixe
 * [ ] **Extension for Mapping**: At the moment it only executes API calls to biodbnet, you could extend it, if outliers occur that it could be checked in the [genenames-database](https://www.genenames.org/tools/multi-symbol-checker/)
+
+### Already Downloaded Datasets
+All data sets of GRNdb & HumanBase are already downloaded at the cip. 
+```bash
+#HumanBase
+cd /nfs/data/GenEpiSeeker/network_layer_data/HumanBase
+
+#GRNdb
+cd /nfs/data/GenEpiSeeker/network_layer_data/GRNdb/raw_data
+```
 ### Contact
 If you have any questions pls, do not hesitate to contact me! :)
 <!-- Tables -->
