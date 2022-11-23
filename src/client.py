@@ -35,7 +35,6 @@ class Client(object):
         '''
 
         names_of_datasets = []
-
         with open(file_input_path, 'r') as read:
             for index, line in enumerate(read):
                 link = line.replace('\n', '')
@@ -62,36 +61,61 @@ class Client(object):
         :param str input_id_list: a string seperating the ids by comma. e.g. <geneId>,<geneId>,...,<geneId>
         :param str type_input_id: defines the type of the input ids
         :param str type_output_id: defines the type of the output ids
+        :return list: returns a list of the requested output ids
         '''
         link = f"https://biodbnet.abcc.ncifcrf.gov/webServices/rest.php/biodbnetRestApi.json?method=db2db&input=" \
                f"{type_input_id}&inputValues={input_id_list}&outputs={type_output_id}&format=col"
         try:
-            response = requests.get(url=link)
+            response = requests.get(url=link).json()
             #Input
-            test = response.json()[0]
+            input_ids_list = response[0].get(self.get_right_json_parameter(type_input_id))#.get(self.get_right_json_parameter(type_output_id))
             #requested output
-            input_id_list = response.json()[1]#[0][self.get_right_json_parameter(type_input_id)]
-            #test = response.json()
-            list_response = response.json()[1][self.get_right_json_parameter(type_output_id)]
+            output_ids_list = response[1].get(self.get_right_json_parameter(type_output_id))
             # Write response to the logger
-            logging.info(list_response)
-            return list_response
-        except:
+            logging.info('Following link worked:')
+            logging.info(link)
+            return output_ids_list
+        except Exception as e:
             logging.critical('REQUEST FAILED WITH FOLLOWING LINK')
             logging.critical(link)
+            logging.critical('REQUEST FAILED WITH FOLLOWING EXCEPTION')
+            logging.critical(e)
 
-        def batch_processing_requests(self):
-            '''Unfortunately the server cannnot process all of the ids at once (lenth of url) and does not provide a
-            body property so. The ids need to be splitted in batches.If tested a little bit and 650 ids worked.'''
-            pass
+    def batch_processing_requests(self, input_values: list, type_input_id: str, type_output_id: str):
+        '''Unfortunately the server cannnot process all of the ids at once (lenth of url) and does not provide a
+        body property so. The ids need to be splitted in batches.If tested a little bit and 650 ids worked.
 
-        def get_right_json_parameter(id: str):
-            if id == 'EnsemblGeneId&taxonId=9606':
-                return 'Ensembl Gene ID'
-            elif id == 'hgncid':
-                return 'HGNC ID'
-            elif id == 'genesymbol':
-                return 'Gene Symbol'
-            elif id == 'geneid':
-                return 'Gene ID'
+        :param list input_values: list of input ids, which need to be mapped
+        :param str type_input_id: given id type of the input
+        :param str type_output_id: id type of the output
+        :return list: complete list of all mapped output ids
+        '''
+        final_list = []
+        iterations = int(len(input_values) / 650)
+        residues = len(input_values) - iterations * 650
+        while len(input_values) > 650:
+            input_string = ','.join(input_values[:650])
+            del (input_values[:650])
+            final_list.extend(self.mapping_of_the_ids(input_string, type_input_id, type_output_id))
+        # for the residues
+        if residues > 0:
+            input_string = ','.join(input_values[:residues])
+            final_list.extend(self.mapping_of_the_ids(input_string, type_input_id, type_output_id))
+        return final_list
+
+    def get_right_json_parameter(self, id_type: str):
+        '''To access the server response
+
+        :param str id_type: Give the right Parameter to acces the data in the json object.
+        :return str: The right attribute
+        '''
+
+        if id_type == 'EnsemblGeneId&taxonId=9606':
+            return 'Ensembl Gene ID'
+        elif id_type == 'hgncid':
+            return 'HGNC ID'
+        elif id_type == 'genesymbol':
+            return 'Gene Symbol'
+        elif id_type == 'geneid':
+            return 'Gene ID'
 

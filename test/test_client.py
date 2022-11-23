@@ -41,15 +41,17 @@ class TestClient(unittest.TestCase):
         converted_ids_list = self.client.mapping_of_the_ids('ARID3A,ARNT', 'genesymbol', 'hgncid')
         self.assertListEqual(converted_ids_list,['HGNC:3031','HGNC:700'])
 
-        #Testing geneid to genesymbol and vice versa
-        converted_ids_list = self.client.mapping_of_the_ids('1820,405','geneid','genesymbol')
-        self.assertListEqual(converted_ids_list,['ARID3A','ARNT'])
-        converted_ids_list = self.client.mapping_of_the_ids('ARID3A,ARNT','genesymbol','geneid')
-        self.assertListEqual(converted_ids_list, ['1820', '405'])
 
     def test_batch_processing_requests(self):
-        self.client.batch_processing_requests()
+        '''Tests if the batch_processing_requests works properly by
+        using an input list above the threshhold of the server'''
 
-        pass
+        input_hgncid =['HGNC:3031' for _ in range(1, 750)]
+        input_hgncid.extend(['HGNC:700' for _ in range(1,50)])
+        result_list = self.client.batch_processing_requests(input_hgncid, 'hgncid', 'genesymbol')
+        solution_list = ['ARID3A' for _ in range(1,750)]
+        solution_list.extend(['ARNT' for _ in range(1,50)])
+        self.assertListEqual(result_list, solution_list)
+
 if __name__ == '__main__':
     unittest.main()
