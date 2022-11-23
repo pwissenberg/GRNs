@@ -11,4 +11,7 @@ class TestGrandParser(unittest.TestCase):
     def test_data_clean(self):
         pass
 
+    def test_handle_adjacency_matrix(self):
+
+        self.grand_parser.handle_adjacency_matrix()
 

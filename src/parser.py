@@ -54,5 +54,3 @@ class Parser(object):
             cleaned_df = self.data_clean(df_dirty)
             clean_dfs.append(cleaned_df)
         return clean_dfs
-
-
