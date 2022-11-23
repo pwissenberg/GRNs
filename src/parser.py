@@ -32,7 +32,7 @@ class Parser(object):
         :return: a list of Panda DataFrames'''
         data_frames = []
         for file in list_of_filenames:
-            data = pd.read_csv(folder_path + file, sep='\t', header=None, usecols=[0, 1])
+            data = pd.read_csv(folder_path + file, sep='\t')
             data_frames.append(data)
         return data_frames
 

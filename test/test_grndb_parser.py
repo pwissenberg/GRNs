@@ -16,3 +16,6 @@ class TestGrndbParser(unittest.TestCase):
         clean_df = pd.DataFrame([['ARID3A','PLA2G15']], columns=['TF', 'Gene'])
         assert_frame_equal(cleaned_df,clean_df)
 
+
+if __name__ == '__main__':
+    unittest.main()
