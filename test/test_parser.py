@@ -21,6 +21,8 @@ class TestParser(unittest.TestCase):
         '''Tests that the output of the functions corresponds to the asked format'''
         pass
 
+    def test_read_in_dataframes(self):
+        self.parser.read_in_dataframes(['sw', 'wsw'])
 
 
 if __name__ == '__main__':

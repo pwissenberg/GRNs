@@ -1,3 +1,5 @@
+from typing import List
+
 import pandas as pd
 class Parser(object):
 
@@ -21,3 +23,24 @@ class Parser(object):
     def write_file(self, dataframe: pd.DataFrame, output_file_path: str):
         '''Writes the dataframe to the output path'''
         dataframe.to_csv(output_file_path, sep='\t', index=False, header=True)
+
+    def read_in_dataframes(self, list_of_filenames: List[str], folder_path: str='./'):
+        '''Loads all dataframes n a dataframe
+
+        :param list list_of_filenames: list of filenames
+        :param folder_path: path of folder containing the datasets
+        :return: a list of Panda DataFrames'''
+        data_frames = []
+        for file in list_of_filenames:
+            data = pd.read_csv(folder_path + file, sep='\t', header=None, usecols=[0, 1])
+            data_frames.append(data)
+        return data_frames
+
+    def data_clean(self, dirty_df : pd.DataFrame):
+        '''The data cleaning process has to be conducted for each dataframe, which provides a different data format
+
+        :param pd.DataFrame dirty_df: the dataframe to clean
+        :return: a cleaned dataframe with the right format
+        '''
+
+        raise NotImplementedError('Please implenent the data cleaning process for each database!')
