@@ -1,6 +1,8 @@
 import requests
 import logging
 
+BATCH_SIZE = 650
+
 logging.basicConfig(
     level=logging.CRITICAL,
     format='{asctime} {levelname:<8} {message}',
@@ -91,11 +93,11 @@ class Client(object):
         :return list: complete list of all mapped output ids
         '''
         final_list = []
-        iterations = int(len(input_values) / 650)
-        residues = len(input_values) - iterations * 650
-        while len(input_values) > 650:
-            input_string = ','.join(input_values[:650])
-            del (input_values[:650])
+        iterations = int(len(input_values) / BATCH_SIZE)
+        residues = len(input_values) - iterations * BATCH_SIZE
+        while len(input_values) >= BATCH_SIZE:
+            input_string = ','.join(input_values[:BATCH_SIZE])
+            del (input_values[:BATCH_SIZE])
             final_list.extend(self.mapping_of_the_ids(input_string, type_input_id, type_output_id))
         # for the residues
         if residues > 0:
