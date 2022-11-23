@@ -44,3 +44,15 @@ class Parser(object):
         '''
 
         raise NotImplementedError('Please implenent the data cleaning process for each database!')
+
+    def clean_all_data(self, dirty_dfs: List[pd.DataFrame]):
+        '''Conducts the data cleaning process for all datasets
+        :param List dirty_dfs: list of the dirty dataframes
+        :return: a list of cleaned dataframes'''
+        clean_dfs = []
+        for df_dirty in dirty_dfs:
+            cleaned_df = self.data_clean(df_dirty)
+            clean_dfs.append(cleaned_df)
+        return clean_dfs
+
+
