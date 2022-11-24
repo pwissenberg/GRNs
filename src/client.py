@@ -16,7 +16,7 @@ class Client(object):
     def __init__(self):
         pass
 
-    def download_dataset(self, url: str, output_path: str, filename: str):
+    def download_dataset_from_url(self, url: str, output_path: str, filename: str):
         '''Downloads a single dataset from a specifc url.
         :param str url: Specified dataset url
         :param str output_path: Specified location for the output file
@@ -43,7 +43,7 @@ class Client(object):
                 name = str(link).split(sep='/')[-1]
                 names_of_datasets.append(name)
                 self.print_progress_of_download(name, link)
-                self.download_dataset(link, file_output_path, name)
+                self.download_dataset_from_url(link, file_output_path, name)
         return names_of_datasets
 
     def print_progress_of_download(self ,file_name: str, url: str):
@@ -70,15 +70,14 @@ class Client(object):
         try:
             response = requests.get(url=link).json()
             #Input
-            input_ids_list = response[0].get(self.get_right_json_parameter(type_input_id))#.get(self.get_right_json_parameter(type_output_id))
+            input_ids_list = response[0].get(self.get_right_json_parameter(type_input_id))
             #requested output
             output_ids_list = response[1].get(self.get_right_json_parameter(type_output_id))
-            # Write response to the logger
             logging.info('Following link worked:')
             logging.info(link)
             return output_ids_list
         except Exception as e:
-            logging.critical('REQUEST FAILED WITH FOLLOWING LINK')
+            logging.critical('REQUEST FAILED WITH FOLLOWING LINK:')
             logging.critical(link)
             logging.critical('REQUEST FAILED WITH FOLLOWING EXCEPTION')
             logging.critical(e)
@@ -90,7 +89,7 @@ class Client(object):
         :param list input_values: list of input ids, which need to be mapped
         :param str type_input_id: given id type of the input
         :param str type_output_id: id type of the output
-        :return list: complete list of all mapped output ids
+        :returns list: complete list of all mapped output ids
         '''
         final_list = []
         iterations = int(len(input_values) / BATCH_SIZE)
@@ -120,4 +119,3 @@ class Client(object):
             return 'Gene Symbol'
         elif id_type == 'geneid':
             return 'Gene ID'
-

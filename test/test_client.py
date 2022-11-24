@@ -16,7 +16,7 @@ class TestClient(unittest.TestCase):
         '''Tests if download and renaming of the dataset-file works'''
 
         test_url = 'https://fastest.fish/lib/downloads/1KB.bin'
-        self.client.download_dataset(test_url, './', 'test.bin')
+        self.client.download_dataset_from_url(test_url, './', 'test.bin')
         self.assert_is_file('./test.bin')
         os.remove('./test.bin')
 

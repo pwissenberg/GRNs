@@ -17,10 +17,3 @@ class GrndbParser(Parser):
         data = data.rename(columns={'gene':'Gene'})
         data.reset_index(drop=True, inplace=True)
         return data
-
-
-
-
-
-
-

@@ -25,7 +25,7 @@ class Parser(object):
         dataframe.to_csv(output_file_path, sep='\t', index=False, header=True)
 
     def read_in_dataframes(self, list_of_filenames: List[str], folder_path: str='./'):
-        '''Loads all dataframes n a dataframe
+        '''Loads all dataframes and returns them in a list
 
         :param list list_of_filenames: list of filenames
         :param folder_path: path of folder containing the datasets
