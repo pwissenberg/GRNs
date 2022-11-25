@@ -1,5 +1,6 @@
 import requests
 import logging
+import re
 
 BATCH_SIZE = 650
 
@@ -22,10 +23,14 @@ class Client(object):
         :param str output_path: Specified location for the output file
         :param str filename: Defines the name of the output file
         '''
-
-        with requests.get(url) as req:
-            with open(output_path + filename, 'wb') as f:
-                f.write(req.content)
+        r = requests.get(url, allow_redirects=True)
+        try:
+            d = r.headers['content-disposition']
+            fname = re.findall('filename=(.+)', d)[0]
+            fname = fname.replace('"','').replace('\'','')
+        except:
+            fname = url.split('/')[-1]
+        open(fname, 'wb').write(r.content)
 
     def download_datasets_from_file(self, file_input_path: str, file_output_path: str = './'):
         '''The function gets as input a file with different data sets and downloads all the files
@@ -33,7 +38,7 @@ class Client(object):
         :param str file_input_path: Defines the input file. The file stores all of the different links(one per line).
         :param str file_output_path: Defines the output path. If it is not specified, it is stored in the working
         directory
-        :return list: Returns a list of all the different file names
+        :return list[str]: Returns a list of all the different file names
         '''
 
         names_of_datasets = []
@@ -63,8 +68,9 @@ class Client(object):
         :param str input_id_list: a string seperating the ids by comma. e.g. <geneId>,<geneId>,...,<geneId>
         :param str type_input_id: defines the type of the input ids
         :param str type_output_id: defines the type of the output ids
-        :return list: returns a list of the requested output ids
+        :return list[str]: returns a list of the requested output ids
         '''
+
         link = f"https://biodbnet.abcc.ncifcrf.gov/webServices/rest.php/biodbnetRestApi.json?method=db2db&input=" \
                f"{type_input_id}&inputValues={input_id_list}&outputs={type_output_id}&format=col"
         try:
@@ -82,14 +88,14 @@ class Client(object):
             logging.critical('REQUEST FAILED WITH FOLLOWING EXCEPTION')
             logging.critical(e)
 
-    def batch_processing_requests(self, input_values: list, type_input_id: str, type_output_id: str):
+    def batch_processing_requests(self, input_values: list[str], type_input_id: str, type_output_id: str):
         '''Unfortunately the server cannnot process all of the ids at once (lenth of url) and does not provide a
         body property so. The ids need to be splitted in batches.If tested a little bit and 650 ids worked.
 
-        :param list input_values: list of input ids, which need to be mapped
+        :param list[str] input_values: list of input ids, which need to be mapped
         :param str type_input_id: given id type of the input
         :param str type_output_id: id type of the output
-        :returns list: complete list of all mapped output ids
+        :returns list[str]: complete list of all mapped output ids
         '''
         final_list = []
         iterations = int(len(input_values) / BATCH_SIZE)
@@ -105,7 +111,8 @@ class Client(object):
         return final_list
 
     def get_right_json_parameter(self, id_type: str):
-        '''To access the server response
+        '''
+        To access the server response
 
         :param str id_type: Give the right Parameter to acces the data in the json object.
         :return str: The right attribute

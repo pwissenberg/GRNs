@@ -7,7 +7,8 @@ class GrandParser(Parser):
     client = Client()
 
     def data_clean(self, dirty_df : pd.DataFrame):
-        '''Converts the dataframe in needed format
+        '''
+        Converts the dataframe in needed format
 
         :param pd.DataFrame dirty_df: the dirty dataframe
         :return: cleaned version of the dataframe
@@ -23,17 +24,22 @@ class GrandParser(Parser):
         return clean_df
 
     def read_in_dataframes(self, list_of_filenames: List[str], folder_path: str='./'):
-        '''Reads in all of the dataframes and transforms them into the right format
+        '''
+        Reads in all of the dataframes and transforms them into the right format
+
         :param list list_of_filenames: list of all the different data sets locations
         :param str folder_path: path to all the specific file names
-        :return list of dataframes'''
+        :return list of dataframes
+        '''
+
         list_dfs = []
         for filename in list_of_filenames:
             list_dfs.append(self.handle_adjacency_matrix(filename))
         return list_dfs
 
     def handle_adjacency_matrix(self,file_path: str,treshhold: int=2):
-        '''Reads in a file in the adjacency matrix format and returns df containing genes an TF.
+        '''
+        Reads in a file in the adjacency matrix format and returns df containing genes an TF.
         Needs a treshhold to specify if it is enough evidence for an edge between the genes.
 
         :param int treshhold: if value above, then it is an edge
@@ -69,5 +75,7 @@ class GrandParser(Parser):
         '''Deletes unnecessary character
 
         :param str input_string: the string to format
-        :return str: transformed string'''
+        :return str: transformed string
+        '''
+
         return input_string.replace('\n','').replace('"','')
