@@ -1,5 +1,5 @@
 import unittest
-from src.client import Client
+from data_pipeline.client import Client
 import pathlib as pl
 import os
 

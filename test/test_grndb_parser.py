@@ -1,7 +1,7 @@
 import unittest
 import pandas as pd
 from pandas.testing import assert_frame_equal
-from src.grndb_parser import GrndbParser
+from data_pipeline.grndb_parser import GrndbParser
 
 class TestGrndbParser(unittest.TestCase):
     grndbParser = GrndbParser()

@@ -1,38 +1,75 @@
-# NeEDL_GRN_data_pipeline
-Data-preprocessing for the [GenEpiSeeker-project](https://github.com/biomedbigdata/genepiseeker_dev)
+#The GRN-Pipeline
+This project is about **downloading**, **parsing** and **combining** different **Gene Regulatory Networks(GRN)** or 
+**Gene Interaction Networks** from three different public availbale-databases for GRNs. Is uses the following databases:
+- [GRNdb](http://www.grndb.com/)
+- [Gene Regulatory Network Database](https://grand.networkmedicine.org/)
+- [HumanBase](https://hb.flatironinstitute.org/download)
 
-## Installation
+##Motivation
+In another coding project at our [research group](https://biomedical-big-data.de/) at the TUM, we were investigating how 
+to build more meaningful SNP-SNP interaction models. In the need to find other information sources to improve the 
+accuracy of th SNP-SNP-interaction predicting model. I have build a data-pipeline to download predicted GRNs from the
+mentioned databases. Due to some missing APIs, I needed to web-scrape all the needed single URLs and then parse them in
+the right format to feed the SNP-SNP interaction model. Another idea was to build a **"general" GRN** to construct a 
+base line.
+
+## Installation/Setup
 Use the package manager [pip3](https://docs.python.org/3/installing/index.html) to install the packages.
 ```bash
-pip3 install requests
-pip3 install pandas
-pip3 install argparse
-pip3 install numpy
-#Install everything with one line
-pip3 install requests pandas argparse numpy
+$ pip install -r requirements.txt
 ```
 ## Usage 
-Downloading the GRNs from the specific databases and transform the data sets to the right format for the NeEDL project.
+Downloading the GRNs from the specific databases and transform the data sets to the right format for the SNP-SNP-interaction 
+project.
+###Downloading the specifc Dataset or GRNs
 ```bash
 #Runs the script with an input-file which contains all of the links
-python3 pip_data.py -in ../resources/test -out final_GRN.txt
+$ python3 cli.py download <input_file> <output_folder>
 ```
-- **-in**: defines the path to the input file. The file contains per line one link to a file
-- **-out**: defines the path of the final finished dataset <br><br>
-Mapping different IDs between the databases. In portions the size of IDs and executes several API calls to [biodbnet](https://biodbnet-abcc.ncifcrf.gov/)
+- **input_file**: defines the path to the input file. The file contains per line one link to a file/dataset/GRN
+- **out_folder**: optional argument to provide a path to store the dowloaded datasets
+###Formatting the downloaded Dataset
+In the following step, the dowloaded GRNs are parsed in the right format. Due to inconsistent use of different IDs at 
+the databases. I used the [biodbnet-API](https://biodbnet-abcc.ncifcrf.gov/) to map all different IDs for Genes to their 
+Gene Symbol and omitted every other information of the datasets. Due to the lack of scale at the API, every big request 
+needed tp be batched. In additon, in the GRAND-database, the GRNs were only provided in the adjacency format, so they
+needed a speical parsing.
 ```bash
 #Conversion from one ID to another
-python3 map_ids.py -in hgncid -out ensemble -infile ../output/test_hgnc.txt -outfile ../output/test_ensemble.txt
+$ python3 cli.py format <input_file> <input_db> <output_folder>
 ```
-- **-in**: defines the ids from the input file
-- **-out**: defines the ids from the output file
-- **-infile**: defines the path of the input file
-- **-outfile**: defines the path of the output file <br> <br>
-**!!The conversion works only with the GeneSymbols, Ensemble and HGNC_ID!!! Please following identifier for the program call: genesymbol, hgncid, ensemble or geneid**
-## Example input & output file
-All the output files should have the same format: **Headerline with TF & gene, then gene represented by its ID \t next ID; New line** 
+- **input_file**: every line in the file should store a file-path to a dataset
+- **input_db**: defines the name of database to tell the program the input dataset format **!!!Please use only the 
+following arguments for the respective database:'grndb', 'grand', 'humanbase'!!!**
+- **output_folder**: defines an optional path if the formated datasets shoudl be stored in the working directory
+### Build Union of Datasets
+To build a "general GRN", I provided the functionality to build a union between several datasets. It is important that 
+the datasets were formated before that step.
+```bash
+#Conversion from one ID to another
+$ python3 cli.py union <input_file> <output_file>
 ```
-TF	gene
+- **input_file**: every line in the file should store a file-path to a 'formatted' dataset
+- **output_file**: defines the name of the finished output_file
+###Complete Pipeline
+Conducts every single step sequentially.
+```bash
+#Conversion from one ID to another
+$ python3 cli.py complete <input_file> <input_db> <output_folder>
+```
+- **input_file**: every line in the file should store a file-path to a 'formatted' dataset
+- **input_db**: defines the name of database to tell the program the input dataset format **!!!Please use only the 
+following arguments for the respective database:'grndb', 'grand', 'humanbase'!!!**
+- **output_file**: defines the name of the finished output_file
+###Visualize final GRN
+In the last step, I visulized the built "general GRNs" with a scale free graph to draw conclusions if it is still a 
+biological network.
+
+## Example output-file Format
+All the output files should have the same format: **Headerline with TF & Gene, then gene represented by its ID \t next 
+ID\n 
+```
+TF	Gene
 ARID3A	ARID3A
 ARID3A	PLA2G15
 ARNT	RORA
@@ -40,29 +77,29 @@ ARNT	RORA
 .
 ```
 ## Project-Structure
-- data-🗂: this folder serves cache for all the single datasets, which were downloaded
-- resources-🗂: contains allready scrapped links to all the dataset from the databases
-- src-🗂: contains all the code-snippets
-- output-🗂: stores the final GRNs
+- data_pipline-🗂: this folder serves cache for all the single datasets, which were downloaded
+- resources-🗂: contains already scrapped links to all the dataset from the three databases
+- cli.py: contains the command line tool interface
+- test -🗂: contains some tests
+- output-🗂: stores some  final GRNs
 ## Tasks
 * [x] Downloading files
 * [x] Concatenating all datasets
-* [x] Works with [GRNdb](http://www.grndb.com/) & [HumanBase](https://hb.flatironinstitute.org/download)
+* [x] Works with [GRNdb](http://www.grndb.com/), [HumanBase](https://hb.flatironinstitute.org/download) & GRAND
 * [x] Mapping between HGNC_ID, Ensemble and GeneSymbols
 * [x] EntrezID is missing in the mapping part
-* [ ] When you try to map GeneSymbols to EntrezID(also NCBI gene id it gives you set of working ncbi ids
-* [ ] Optimization for large amount of data
-* [ ] Should work with adjacenc matrixe
+* [x] Optimization for large amount of data
+* [x] Works with adjacency matrces
 * [ ] **Extension for Mapping**: At the moment it only executes API calls to biodbnet, you could extend it, if outliers occur that it could be checked in the [genenames-database](https://www.genenames.org/tools/multi-symbol-checker/)
 
 ### Already Downloaded Datasets
 All data sets of GRNdb & HumanBase are already downloaded at the cip. 
 ```bash
 #HumanBase
-cd /nfs/data/GenEpiSeeker/network_layer_data/HumanBase
+$ cd /nfs/data/GenEpiSeeker/network_layer_data/HumanBase
 
 #GRNdb
-cd /nfs/data/GenEpiSeeker/network_layer_data/GRNdb/raw_data
+$ cd /nfs/data/GenEpiSeeker/network_layer_data/GRNdb/raw_data
 ```
 ### Contact
 If you have any questions pls, do not hesitate to contact me! :)
@@ -70,7 +107,3 @@ If you have any questions pls, do not hesitate to contact me! :)
 | Name              | Email                                                   |
 |-------------------|---------------------------------------------------------|
 | Paul Wissenberg   | [paul.wissenberg@tum.de](mailto:paul.wissenberg@tum.de) |
-| Mira Kreuzer      | [mira.kreuzer@tum.de](mailto:mira.kreuzer@tum.de) |
-| Norman Roggendorf | [norman.roggendorf@tum.de](mailto:norman.roggendorf@tum.de) |
-| Markus Hoffmann   | [markus.hoffman@tum.de](mailto:markus.hoffman@tum.de) |
-|Christian Hoffmann   | [christian.hoffmann@tum.de](mailto:christian.hoffmann@tum.de) |

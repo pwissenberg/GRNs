@@ -1,3 +1,1 @@
-https://granddb.s3.amazonaws.com/tissues/networks/Adipose_Subcutaneous.csv
 http://www.grndb.com/download/txt?condition=AML_TCGA
-https://s3-us-west-2.amazonaws.com/humanbase/networks/adrenal_gland.gz

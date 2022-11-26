@@ -1,7 +1,7 @@
 import unittest
 import pandas as pd
 from pandas.testing import assert_frame_equal
-from src.humanbase_parser import HumanBaseParser
+from data_pipeline.humanbase_parser import HumanBaseParser
 
 class TestGrndbParser(unittest.TestCase):
     humanbaseParser = HumanBaseParser()

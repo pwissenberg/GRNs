@@ -2,7 +2,7 @@ import unittest
 from typer.testing import CliRunner
 
 
-from src.cli import app
+from cli import app
 
 runner = CliRunner()
 
@@ -13,7 +13,14 @@ class TestCli(unittest.TestCase):
         '''
         Testing the download functionality of the cli command
         '''
-        self.runner.invoke(app, ['download','test_download_datasets.txt'])
+
+        result = self.runner.invoke(app, ['download','test_download_datasets.txt'])
+        assert result.exit_code == 0
 
     def test_format(self):
-        self.runner.invoke(app, ['format', 'test_format_grndb.txt', 'grndb'])
+        '''
+        Testing if the cli command format works
+        '''
+
+        result = self.runner.invoke(app, ['format', 'test_format_grndb.txt', 'grndb'])
+        assert result.exit_code == 0
