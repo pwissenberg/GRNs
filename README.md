@@ -16,8 +16,10 @@ base line.
 ## Installation/Setup
 Use the package manager [pip3](https://docs.python.org/3/installing/index.html) to install the packages.
 ```bash
-# TODO: Recommendation
+#Recommendation: Use a local environment and ensure that the local environment is actived
 python3 -m venv venv
+source env/bin/activate
+
 pip3 install --upgrade cython
 pip3 install -r requirements.txt
 ```

@@ -13,7 +13,7 @@ from data_pipeline.visual import Visualizer
 app = typer.Typer()
 download_app = typer.Typer()
 client = Client()
-parser: (Parser|GrndbParser|GrandParser|HumanBaseParser) = Parser()
+parser = Parser()
 visualizer = Visualizer()
 input_validator = InputValidator()
 
@@ -81,13 +81,14 @@ def visualize(input_file: str, statistical_op: str):
     df = parser.read_in_dataframes([input_file])
     edges_degree_list = visualizer.count_edges_per_gene(df[0])
     prepared_df = visualizer.prepare_dataset_for_visulization(edges_degree_list)
-    match statistical_op:
-        case 'log_plot':
-            visualizer.plot_log_number_nodes_log_degree(prepared_df)
-        case 'plot':
-            visualizer.plot_number_nodes_degrees(prepared_df)
-        case 'fitting_summary':
-            visualizer.fitting_test(prepared_df)
+
+    if statistical_op == 'log_plot':
+        visualizer.plot_log_number_nodes_log_degree(prepared_df)
+    elif statistical_op == 'plot':
+        visualizer.plot_number_nodes_degrees(prepared_df)
+    elif statistical_op == 'fitting_summary':
+        visualizer.fitting_test(prepared_df)
+
 
 @app.command()
 def complete(input_file: str, input_db: str,output_folder: str = './'):

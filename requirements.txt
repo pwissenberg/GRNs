@@ -23,6 +23,5 @@ statsmodels==0.13.5
 toml==0.10.2
 tornado==6.2
 trove_classifiers==2022.10.19
-truststore==0.5.0
 typer==0.7.0
 rich==12.6.0
