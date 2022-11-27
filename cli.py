@@ -8,6 +8,7 @@ from data_pipeline.grndb_parser import GrndbParser
 import pandas as pd
 from data_pipeline.humanbase_parser import HumanBaseParser
 from data_pipeline.input_validator import InputValidator
+from data_pipeline.visual import Visualizer
 
 app = typer.Typer()
 download_app = typer.Typer()
@@ -63,9 +64,18 @@ def union(input_file: str, output_folder: str = './'):
     parser.write_file(united_df, 'UNITED_dataset.txt', output_folder)
 
 @app.command()
-def visulize():
-    #Input finished parsed data set
-    #Creates the visualization
+def visualize(input_file: str):
+    '''
+    Plots the degree distribution of the dataset
+
+    :param input_file: file to the final dataset/GRN
+
+    '''
+    parser = Parser()
+    visuliuer = Visualizer()
+    df = parser.read_in_dataframes([input_file])
+    edges_degree_list = visuliuer.count_edges_per_gene(df)
+    visuliuer.plot_edges_distribution(edges_degree_list)
     #Stores the visualization
     pass
 
