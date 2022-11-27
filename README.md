@@ -16,7 +16,10 @@ base line.
 ## Installation/Setup
 Use the package manager [pip3](https://docs.python.org/3/installing/index.html) to install the packages.
 ```bash
-$ pip install -r requirements.txt
+pip3 install --upgrade cython
+```
+```bash
+pip3 install -r requirements.txt
 ```
 ## Usage 
 Downloading the GRNs from the specific databases and transform the data sets to the right format for the SNP-SNP-interaction 
