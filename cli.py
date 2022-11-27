@@ -64,18 +64,22 @@ def union(input_file: str, output_folder: str = './'):
     parser.write_file(united_df, 'UNITED_dataset.txt', output_folder)
 
 @app.command()
-def visualize(input_file: str):
+def visualize(input_file: str, statistical_op: str, output_folder: str = './'):
     '''
     Plots the degree distribution of the dataset
 
-    :param input_file: file to the final dataset/GRN
+    :param str input_file: file to the final dataset/GRN
+    :param str statistical_op: defines if it should plot the degree distribution of the GRN, the log-transformed degree
+    distribution, or only a summary statistics after transforming the
 
     '''
     parser = Parser()
     visuliuer = Visualizer()
     df = parser.read_in_dataframes([input_file])
     edges_degree_list = visuliuer.count_edges_per_gene(df)
-    visuliuer.plot_edges_distribution(edges_degree_list)
+    prepared_df = visuliuer.prepare_dataset_for_visulization(edges_degree_list)
+
+    visuliuer.plot_number_nodes_degrees(edges_degree_list)
     #Stores the visualization
     pass
 

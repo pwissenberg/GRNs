@@ -6,7 +6,10 @@ from .parser import Parser
 from .grand_parser import GrandParser
 from .grndb_parser import GrndbParser
 from .humanbase_parser import HumanBaseParser
+
 DATA_BASES = ['grndb', 'grand', 'humanbase']
+STATISTIC_OPERATIONS = ['log_plot', 'plot', 'fitting_summary']
+
 class InputValidator(object):
 
 
@@ -48,4 +51,13 @@ class InputValidator(object):
         elif parser_str == 'humanbase':
             return HumanBaseParser()
 
-
+    def check_statistics(self, statistics: list[str]):
+        '''
+        checks if it is one of the statistics operations
+        :param list[str] statistics: defines which statistics operation should be applied
+        '''
+        for stat in statistics:
+            if stat not in STATISTIC_OPERATIONS:
+                print('[bold red]Alert![/bold red] :boom: Please use only the keywords [green] (log_plot, plot, '
+                      'fitting_summary)[/green] for the database argument!')
+                raise typer.Exit()

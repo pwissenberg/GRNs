@@ -14,12 +14,20 @@ class TestCli(unittest.TestCase):
         df_input = pd.read_csv('../final_GRN.txt', sep='\t')
         #Call the function
         result_list = self.visulizer.count_edges_per_gene(df_input)
-        self.visulizer.plot_edges_distribution(result_list)
+        result_df = self.visulizer.prepare_dataset_for_visulization(result_list)
+        #self.visulizer.plot_number_nodes_degrees(result_df)
+        #self.visulizer.plot_log_number_nodes_log_degree(result_df)
+        self.visulizer.fitting_test(result_df)
+        #self.visulizer.plot_log_number_nodes_log_degree(result_df)
         #self.assertListEqual(result_list, sol_list)
 
     def test_plot_degree_distribution(self):
         '''
         Tests that the degree distribution graph is created
         '''
-        self.visulizer.plot_edges_distribution([12,42,5,5,6,677])
+        self.visulizer.plot_number_nodes_degrees([12, 42, 5, 5, 6, 677])
         pass
+    def test_plot_histo(self):
+        df_input = pd.read_csv('../final_GRN.txt', sep='\t')
+        self.visulizer.plot_histo(df_input)
+
