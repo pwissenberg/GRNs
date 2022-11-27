@@ -17,7 +17,7 @@ class Client(object):
     def __init__(self):
         pass
 
-    def download_dataset_from_url(self, url: str, output_path: str, filename: str):
+    def download_dataset_from_url(self, url: str, output_path: str):
         '''Downloads a single dataset from a specifc url.
         :param str url: Specified dataset url
         :param str output_path: Specified location for the output file
@@ -31,6 +31,7 @@ class Client(object):
         except:
             fname = url.split('/')[-1]
         open(fname, 'wb').write(r.content)
+        return fname
 
     def download_datasets_from_file(self, file_input_path: str, file_output_path: str = './'):
         '''The function gets as input a file with different data sets and downloads all the files
@@ -45,13 +46,12 @@ class Client(object):
         with open(file_input_path, 'r') as read:
             for index, line in enumerate(read):
                 link = line.replace('\n', '')
-                name = str(link).split(sep='/')[-1]
+                self.print_progress_of_download(link)
+                name = self.download_dataset_from_url(link, file_output_path)
                 names_of_datasets.append(name)
-                self.print_progress_of_download(name, link)
-                self.download_dataset_from_url(link, file_output_path, name)
         return names_of_datasets
 
-    def print_progress_of_download(self ,file_name: str, url: str):
+    def print_progress_of_download(self, url: str):
         '''Prints the progress of the download.
 
         :param str file_name: The name of the file.
@@ -59,7 +59,7 @@ class Client(object):
         '''
 
         print('_______________________________________________________________________________________________________')
-        print('Download of following dataset: ', file_name)
+        print('Download of following dataset: ')
         print(url)
 
     def mapping_of_the_ids(self,input_id_list: str,type_input_id: str, type_output_id: str):

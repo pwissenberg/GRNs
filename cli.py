@@ -14,6 +14,7 @@ app = typer.Typer()
 download_app = typer.Typer()
 client = Client()
 parser: (Parser|GrndbParser|GrandParser|HumanBaseParser) = Parser()
+visualizer = Visualizer()
 input_validator = InputValidator()
 
 @app.command()
@@ -21,12 +22,12 @@ def download(input_file: str, output_folder: str = './'):
     '''
     Downloads every dataset from the input file
 
-    :param str input: Path to the file. Containing all f the links.
-    :param str output: Optional path to a folder to store all of the datasets.
+    :param str input_file: Path to the file; The file contains all urls to download
+    :param str output_folder: Optional path to a folder to store all of the datasets.
     '''
 
     input_validator.check_existence_of_paths([input_file, output_folder])
-    client.download_datasets_from_file(input_file, output_folder)
+    return client.download_datasets_from_file(input_file, output_folder)
 
 @app.command()
 def format(input_file: str, input_db: str,output_folder: str = './'):
@@ -59,12 +60,12 @@ def union(input_file: str, output_folder: str = './'):
     '''
     input_validator.check_existence_of_paths([input_file, output_folder])
     parser = Parser()
-    dataset_list = parser.read_datasets()
+    dataset_list = parser.read_datasets(input_file)
     united_df = parser.create_union(dataset_list)
     parser.write_file(united_df, 'UNITED_dataset.txt', output_folder)
 
 @app.command()
-def visualize(input_file: str, statistical_op: str, output_folder: str = './'):
+def visualize(input_file: str, statistical_op: str):
     '''
     Plots the degree distribution of the dataset
 
@@ -73,25 +74,43 @@ def visualize(input_file: str, statistical_op: str, output_folder: str = './'):
     distribution, or only a summary statistics after transforming the
 
     '''
+    input_validator.check_existence_of_paths([input_file])
+    input_validator.check_statistics([statistical_op])
     parser = Parser()
-    visuliuer = Visualizer()
-    df = parser.read_in_dataframes([input_file])
-    edges_degree_list = visuliuer.count_edges_per_gene(df)
-    prepared_df = visuliuer.prepare_dataset_for_visulization(edges_degree_list)
 
-    visuliuer.plot_number_nodes_degrees(edges_degree_list)
-    #Stores the visualization
-    pass
+    df = parser.read_in_dataframes([input_file])
+    edges_degree_list = visualizer.count_edges_per_gene(df[0])
+    prepared_df = visualizer.prepare_dataset_for_visulization(edges_degree_list)
+    match statistical_op:
+        case 'log_plot':
+            visualizer.plot_log_number_nodes_log_degree(prepared_df)
+        case 'plot':
+            visualizer.plot_number_nodes_degrees(prepared_df)
+        case 'fitting_summary':
+            visualizer.fitting_test(prepared_df)
 
 @app.command()
-def complete_data_pip(input_file: str, input_db: str,output_folder: str = './'):
+def complete(input_file: str, input_db: str,output_folder: str = './'):
+    '''
+    Conducts the whole data pipeline process of downloading, formatting and building the union. !!!Here you can download
+    the data sets from one data base. Because in the formatting step you need to know the
 
-    #Downloads the datasets
-    #Format the datasets
-    #Union the datasets
+    :param input_file: Path to the file; The file contains all urls to download
+    :param input_db: Defines the database type for the input
+    :param output_folder:
+    :return:
+    '''
+    downloaded_dataset_paths = download(input_file, output_folder)
+    #TODO: Find another solution
+    f = open('data_sets.txt', 'w')
+    f2 = open('cleaned_data_sets.txt', 'w')
 
-    pass
-
+    for name in downloaded_dataset_paths:
+        f.write(name + '\n')
+        f2.write('CLEANED_'+name+'\n')
+    f.close()
+    format('data_sets.txt',input_db ,output_folder)
+    union('cleaned_data_sets.txt',output_folder)
 
 if __name__ == "__main__":
     app()

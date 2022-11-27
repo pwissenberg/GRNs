@@ -8,11 +8,12 @@ class Visualizer(object):
         '''
         Calculates the degree of each node in the network
 
-        :param pandas.DataFrame df: the GRN in the righjt format of the pipeline
+        :param pandas.DataFrame df: the GRN in the right format of the pipeline
         :return list[str]: list of all the occurences
         '''
 
         final_occurences = []
+        gene_occurence_series = df['Gene'].value_counts()
         gene_occurence_series = df['Gene'].value_counts()
         tf_occurence_series = df['TF'].value_counts()
 
@@ -33,6 +34,7 @@ class Visualizer(object):
         Plots the degree distribtuion of genes/nodes
 
         :param pandas.DataFrame df_plot: dataframe ordered with the columns degree & counts
+        :param str save_figure_path: defines a path to save the created figure
         '''
         fig, axe = plt.subplots(figsize=(10,6))
         axe.bar(df_plot['degree'], df_plot['counts'], color = 'blue', width= 1)
@@ -40,6 +42,7 @@ class Visualizer(object):
         axe.set_ylabel('Count of nodes with degree')
         axe.set_xlabel('Degree of a node')
         plt.xlim(left=1)
+        fig.canvas.manager.set_window_title('Plotting Degree Distribution')
         plt.show()
 
     def plot_log_number_nodes_log_degree(self, df_plot: pd.DataFrame):
@@ -47,6 +50,7 @@ class Visualizer(object):
         Conducts the loglog Transformation and returns the same plot
 
         :param pandas.DataFrame df_plot: dataframe ordered with the columns degree & counts
+        :param str save_figure_path: defines a path to save the created figure
         '''
         log_counts = np.log(df_plot['counts'])
         log_degree = np.log(df_plot['degree'])
@@ -56,6 +60,7 @@ class Visualizer(object):
         a.set_title('$log(counts)=f(logDegree)$')
         a.set_xlabel('logDegree')
         a.set_ylabel('logCount')
+        fig.canvas.manager.set_window_title('Log-Log-Transformation')
         plt.show()
 
     def prepare_dataset_for_visulization(self, occurence_list: list[int]):
@@ -69,7 +74,6 @@ class Visualizer(object):
         degree_dict = {}
         for occurence in occurence_list:
             degree_dict[occurence] = degree_dict.get(occurence, 0) + 1
-        print(degree_dict)
         df_plot = pd.DataFrame(degree_dict.items(), columns=['degree', 'counts'])
         df_plot.sort_values(by='degree', ascending=True, inplace=True)
         df_plot.reset_index(drop=True)
@@ -84,7 +88,3 @@ class Visualizer(object):
         df_log = np.log(df[['degree','counts']])
         models = ols('counts ~ degree', data = df_log).fit()
         print(models.summary())
-
-
-
-
