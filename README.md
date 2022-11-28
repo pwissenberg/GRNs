@@ -23,7 +23,7 @@ source env/bin/activate
 pip3 install --upgrade cython
 pip3 install -r requirements.txt
 ```
-##Examples
+## Examples
 These examples are to demonstrate the pipeline directly from the terminal. Therefore, I provided short constructed input 
 files. If you want to download all the GRNs and conduct transformation and analysis, please use the files in the 
 resource folder, which contain all the scrapped links to the datasets. 
