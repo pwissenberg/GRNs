@@ -36,14 +36,14 @@ resource folder, which contain all the scrapped links to the datasets.
 ## Usage 
 Downloading the GRNs from the specific databases and transform the data sets to the right format for the SNP-SNP-interaction 
 project.
-###Downloading the specifc Dataset or GRNs
+### Downloading the specifc Dataset or GRNs
 ```bash
 #Runs the script with an input-file which contains all of the links
 python3 cli.py download <input_file> <output_folder>
 ```
 - **input_file**: defines the path to the input file. The file contains per line one link to a file/dataset/GRN
 - **out_folder**: optional argument to provide a path to store the dowloaded datasets
-###Formatting the downloaded Dataset
+### Formatting the downloaded Dataset
 In the following step, the downloaded GRNs are parsed in the right format. Due to inconsistent use of different IDs at 
 the databases. I used the [biodbnet-API](https://biodbnet-abcc.ncifcrf.gov/) to map all different IDs for Genes to their 
 Gene Symbol and omitted every other information of the datasets. Due to the lack of scale at the API, every big request 
@@ -66,7 +66,7 @@ python3 cli.py union <input_file> <output_file>
 ```
 - **input_file**: every line in the file should store a file-path to a 'formatted' dataset
 - **output_file**: defines the name of the finished output_file
-###Complete Pipeline
+### Complete Pipeline
 Conducts every single step sequentially.
 ```bash
 #Conversion from one ID to another
@@ -76,7 +76,7 @@ python3 cli.py complete <input_file> <input_db> <output_folder>
 - **input_db**: defines the name of database to tell the program the input dataset format **!!!Please use only the 
 following arguments for the respective database:'grndb', 'grand', 'humanbase'!!!**
 - **output_file**: defines the name of the finished output_file
-###Visualize final GRN
+### Visualize final GRN
 A lot of networks in realty do not follow a normal distribution. This applies also to the degree GRN's degree 
 distribution. Instead, if we are plotting the degree distribution of the nodes (genes) in a GRN, it should follow a 
 power law distribution. So that is the reason why I build the visualization feature. The visualization feature enables
