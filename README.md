@@ -31,18 +31,19 @@ files. If you want to download all the GRNs and conduct transformation and analy
 resource folder, which contain all the scrapped links to the datasets. 
 ```bash
 #Download to two GRNS
-
+python3 cli.py download test_complete    
 
 #Formatting of the GRNs
+python3 cli.py format example_dataset_list grndb 
 
-
-#Concatenating of the GRNs
-
+#Create the union of the GRNs
+python3 cli.py union example_cleaned_datasets 
 
 # Complete data pipeline from Download to Concatenating
+python3 cli.py complete example_dataset_links grndb 
 
 #Visualizing the data
-
+python3 cli.py visualize final_GRN.txt plot 
 ```
 
 ## Usage 
