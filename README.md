@@ -15,7 +15,7 @@ baseline.
 
 ## Installation/Setup
 Use the package manager [pip3](https://docs.python.org/3/installing/index.html) to install the packages.
-Programming Language :: Python :: 3.9
+**Python3 version: python@3.9**
 
 ```bash
 #Recommendation: Use a local environment and ensure that the local environment is actived
