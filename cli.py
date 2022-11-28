@@ -60,8 +60,11 @@ def union(input_file: str, output_folder: str = './'):
     '''
     input_validator.check_existence_of_paths([input_file, output_folder])
     parser = Parser()
+    print(input_file)
     dataset_list = parser.read_datasets(input_file)
-    united_df = parser.create_union(dataset_list)
+    print(dataset_list)
+    df_list = parser.read_in_dataframes(dataset_list)
+    united_df = parser.create_union(df_list)
     parser.write_file(united_df, 'UNITED_dataset.txt', output_folder)
 
 @app.command()
@@ -91,7 +94,7 @@ def visualize(input_file: str, statistical_op: str):
 
 
 @app.command()
-def complete(input_file: str, input_db: str,output_folder: str = './'):
+def complete(input_file: str, input_db: str, output_folder: str = './'):
     '''
     Conducts the whole data pipeline process of downloading, formatting and building the union. !!!Here you can download
     the data sets from one data base. Because in the formatting step you need to know the
@@ -105,11 +108,15 @@ def complete(input_file: str, input_db: str,output_folder: str = './'):
     #TODO: Find another solution
     f = open('data_sets.txt', 'w')
     f2 = open('cleaned_data_sets.txt', 'w')
-
-    for name in downloaded_dataset_paths:
-        f.write(name + '\n')
-        f2.write('CLEANED_'+name+'\n')
+    for index, name in enumerate(downloaded_dataset_paths):
+        if index != len(downloaded_dataset_paths)-1:
+            f.write(name + '\n')
+            f2.write('CLEANED_'+name+'\n')
+        else:
+            f.write(name)
+            f2.write('CLEANED_' + name )
     f.close()
+    f2.close()
     format('data_sets.txt',input_db ,output_folder)
     union('cleaned_data_sets.txt',output_folder)
 
