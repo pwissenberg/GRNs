@@ -112,7 +112,6 @@ ARNT	RORA
 - resources-🗂: contains already scrapped links to all the dataset from the three databases
 - cli.py: contains the command line tool interface
 - test -🗂: contains some tests
-
 ## Tasks
 * [x] Downloading files
 * [x] Concatenating all datasets
