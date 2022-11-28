@@ -28,8 +28,18 @@ These examples are to demonstrate the pipeline directly from the terminal. There
 files. If you want to download all the GRNs and conduct transformation and analysis, please use the files in the 
 resource folder, which contain all the scrapped links to the datasets. 
 ```bash
-#Download to GRNs
+#Download to two GRNS
 
+
+#Formatting of the GRNs
+
+
+#Concatenating of the GRNs
+
+
+# Complete data pipeline from Download to Concatenating
+
+#Visualizing the data
 
 ```
 
