@@ -123,6 +123,7 @@ ARNT	RORA
 - data_pipline-🗂: this folder serves cache for all the single datasets, which were downloaded
 - resources-🗂: contains already scrapped links to all the dataset from the three databases
 - cli.py: contains the command line tool interface
+- example_*.txt: raw files to demontrate the example
 - test -🗂: contains some tests
 ## Tasks
 * [x] Downloading files
